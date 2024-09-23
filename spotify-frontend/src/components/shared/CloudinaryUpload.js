@@ -1,12 +1,12 @@
 import { openUploadWidget } from "../../utils/CloudinaryService";
-// import {nkgwnnjm} from "../../utils/config";
+// import {Password [pls} from "../../utils/config";
 
 const CloudinaryUpload = ({ setUrl, setName, setDuration }) => {
   const uploadImageWidget = () => {
     let myUploadWidget = openUploadWidget(
       {
-        cloudName: "dhfpuygh1",
-        uploadPreset: "nkgwnnjm",
+        cloudName: "Passsword here",
+        uploadPreset: "Passsword here",
         sources: ["local"],
       },
       function (error, result) {
