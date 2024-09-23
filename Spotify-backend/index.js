@@ -17,7 +17,7 @@ app.use(express.json());
 
 mongoose
   .connect(
-    "mongodb+srv://rohitttpawar:" +
+    "mongodb+srv://rohitpawar:" +
       process.env.MONGO_PASSWORD +
       "@cluster0.c9jchbi.mongodb.net/?retryWrites=true&w=majority",
     {
@@ -34,7 +34,7 @@ mongoose
 
 let opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
-opts.secretOrKey = "thisKeyIsSupposedToBeSecret";
+opts.secretOrKey = "(Your secret key)";
 passport.use(
   new JwtStrategy(opts, function (jwt_payload, done) {
     User.findOne({ _id: jwt_payload.identifier }, function (err, user) {
