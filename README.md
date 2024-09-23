@@ -49,7 +49,8 @@ The frontend will be running on `http://localhost:3000` and the backend on `http
 
 ### Homepage
 
-![Melovibe Homepage](https://link-to-screenshot.com/homepage.png)
+![Screenshot 2024-03-10 153343](https://github.com/user-attachments/assets/fd178484-fd96-4dd5-ba9d-26b2f677e2cc)
+
 
 ### Search Results
 
