@@ -39,10 +39,4 @@ export const makeAuthenticatedGETRequest = async (route) => {
     return formattedResponse;
 };
 
-const getToken = () => {
-    const accessToken = document.cookie.replace(
-        /(?:(?:^|.*;\s*)token\s*=\s*([^;]*).*$)|^.*$/,
-        "$1"
-    );
-    return accessToken;
-};
+
