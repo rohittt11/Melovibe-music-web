@@ -1,5 +1,6 @@
 import { Icon } from "@iconify/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
 // import spotify_logo from "../assets/images/spotify_logo_white.svg";
 import MeloVibe from "../assets/images/MeloVibe.png";
 import IconText from "../components/shared/IconText";
@@ -120,123 +121,207 @@ const MeloVibefemale = [
 ];
 
 const Home = () => {
+  const navigate = useNavigate();
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false);
+
+  const promptLogin = () => setShowLoginPrompt(true);
+
   return (
-    <div className="h-full w-full flex">
-      {/* This first div will be the left panel */}
-      <div className="h-full w-1/5 bg-black flex flex-col justify-between pb-10">
+    <div className="h-screen w-full flex overflow-hidden">
+      {/* ============ SIDEBAR ============ */}
+      <div className="hidden md:flex h-full w-64 bg-black flex-col justify-between pb-6 shrink-0">
         <div>
-          {/* This div is for logo */}
-          <div className="logoDiv p-6">
-            <img src={MeloVibe} alt="MeloVibe logo" width={200} />
+          <div className="logoDiv p-6 flex justify-center">
+            <img
+              src={MeloVibe}
+              alt="MeloVibe logo"
+              className="w-40 h-auto object-contain"
+            />
           </div>
-          <div className="py-5">
+          <div className="py-2 space-y-1">
             <IconText
               iconName={"material-symbols:home"}
               displayText={"Home"}
               active
             />
-            <IconText
-              iconName={"material-symbols:search-rounded"}
-              displayText={"Search"}
-            />
-            <IconText iconName={"icomoon-free:books"} displayText={"Library"} />
+            <div onClick={promptLogin}>
+              <IconText
+                iconName={"material-symbols:search-rounded"}
+                displayText={"Search"}
+              />
+            </div>
+            <div onClick={promptLogin}>
+              <IconText
+                iconName={"icomoon-free:books"}
+                displayText={"Library"}
+              />
+            </div>
           </div>
-          <div className="pt-5">
-            <IconText
-              iconName={"material-symbols:add-box"}
-              displayText={"Create Playlist"}
-            />
-            <IconText
-              iconName={"mdi:cards-heart"}
-              displayText={"Liked Songs"}
-            />
+          <div>
+            <div onClick={promptLogin}>
+              <IconText
+                iconName={"material-symbols:add-box"}
+                displayText={"Create Playlist"}
+              />
+            </div>
           </div>
         </div>
       </div>
-      {/* This second div will be the right part(main content) */}
-      <div className="h-full w-4/5 bg-app-black overflow-auto">
-        <div className="navbar w-full h-1/10 bg-black bg-opacity-30 flex items-center justify-end">
-          <div className="w-1/2 flex h-full">
-            <div className="w-3/5 flex justify-around items-center">
-              {/* <div className="h-1/2 border-r border-white"></div> */}
-            </div>
-            <div className="w-3/5 flex justify-around h-full items-center">
-              <Link
-                to="/signup"
-                className="bg-purple-400  text-black hover:text-white h-2/3 px-8 flex items-center justify-center rounded-full font-semibold cursor-pointer"
-              >
-                Sign up
-              </Link>
-              <Link
-                to="/login"
-                className="bg-purple-400  text-black hover:text-white h-2/3 px-8 flex items-center justify-center rounded-full font-semibold cursor-pointer"
-              >
-                Log in
-              </Link>
-            </div>
+
+      {/* ============ MAIN ============ */}
+      <div className="flex-1 h-full bg-app-black overflow-auto min-w-0">
+        {/* Header */}
+        <div className="navbar w-full h-16 bg-black bg-opacity-40 backdrop-blur-md flex items-center justify-between px-4 md:px-8 sticky top-0 z-10">
+          <div className="flex items-center">
+            {/* Mobile logo */}
+            <img
+              src={MeloVibe}
+              alt="MeloVibe logo"
+              className="md:hidden h-8 object-contain"
+            />
+          </div>
+          <div className="flex items-center gap-2 md:gap-3">
+            <Link
+              to="/signup"
+              className="text-white hover:bg-purple-600 bg-purple-500 rounded-full font-semibold text-sm md:text-base px-3 md:px-8 py-2 transition-colors"
+            >
+              Sign up
+            </Link>
+            <Link
+              to="/login"
+              className="bg-white text-black hover:bg-gray-200 font-semibold text-sm md:text-base px-5 md:px-8 py-2 rounded-full transition-colors"
+            >
+              Log in
+            </Link>
           </div>
         </div>
-        <div>
-          <h1 className="text-4xl text-purple-400 text-center font-bold mb-4">
+
+        {/* Hero */}
+        <div className="px-4 md:px-8 pt-4 md:pt-7 pb-6 text-center">
+          <h1 className="text-xl md:text-3xl text-purple-400 font-bold mb-2">
             Hold up!
           </h1>
-
-          <h2 className="text-2xl text-white text-center font-bold mb-4">
-            Seems like you're not LoggedIn!
+          <h2 className="text-lg md:text-xl text-white font-bold mb-2">
+            Seems like you're not logged in!{" "}
+            <span className=" text-purple-400">
+              It's time to login and start jammin'!
+            </span>
           </h2>
-          <p className="text-lg text-purple-400 text-center">
-            It's time to login and start jammin'!
-          </p>
-          <div className="content p-8 pt-0 overflow-auto">
-            <PlaylistView
-              titleText="Tribute To 90's Singers"
-              cardsData={focusCardsData}
-            />
-            <PlaylistView
-              titleText="Popular Male singers"
-              cardsData={MeloVibemale}
-            />
-            <PlaylistView
-              titleText="Popular Female Singers"
-              cardsData={MeloVibefemale}
-            />
+          <div className="flex flex-col sm:flex-row gap-3 justify-center mt-2 text-sm">
+            <Link
+              to="/signup"
+              className="bg-purple-500 hover:bg-purple-600 text-white px-4 py-3 rounded-full font-semibold transition-colors"
+            >
+              Create Account
+            </Link>
+            <Link
+              to="/login"
+              className="border border-white/30 hover:border-white text-white px-8 py-3 rounded-full font-semibold transition-colors"
+            >
+              Log In
+            </Link>
           </div>
         </div>
+
+        {/* Previews */}
+        <div className="px-4 md:px-8 pb-8">
+          <PlaylistView
+            titleText="Tribute To 90's Singers"
+            cardsData={focusCardsData}
+          />
+          <PlaylistView
+            titleText="Popular Male Singers"
+            cardsData={MeloVibemale}
+          />
+          <PlaylistView
+            titleText="Popular Female Singers"
+            cardsData={MeloVibefemale}
+          />
+        </div>
       </div>
+
+      {/* ============ LOGIN PROMPT MODAL ============ */}
+      {showLoginPrompt && (
+        <div
+          className="fixed inset-0 z-[200] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+          onClick={() => setShowLoginPrompt(false)}
+        >
+          <div
+            className="bg-black rounded-2xl p-6 md:p-8 max-w-sm w-full text-center shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="w-16 h-16 rounded-full bg-purple-600/20 flex items-center justify-center mx-auto mb-4">
+              <Icon
+                icon="mdi:lock-outline"
+                className="text-purple-400"
+                fontSize={40}
+              />
+            </div>
+            <p className="text-lg md:text-xl font-bold text-white mb-1">
+              Create an account first
+            </p>
+            <p className="text-sm text-gray-400 mb-6">
+              You need to be signed in to access this feature.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              <button
+                onClick={() => setShowLoginPrompt(false)}
+                className="flex-1 bg-transparent border border-white/20 text-white font-semibold py-2.5 rounded-full hover:bg-white/5 transition-colors"
+              >
+                Cancel
+              </button>
+              <Link
+                to="/signup"
+                className="flex-1 bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded-full transition-colors text-center"
+              >
+                Sign Up
+              </Link>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
+/* ============ PlaylistView ============ */
 const PlaylistView = ({ titleText, cardsData }) => {
   return (
-    <div className="text-white mt-8">
-      <div className="text-2xl font-semibold mb-5">{titleText}</div>
-      <div className="w-full flex justify-between space-x-4">
-        {
-          // cardsData will be an array
-          cardsData.map((item) => {
-            return (
-              <Card
-                title={item.title}
-                description={item.description}
-                imgUrl={item.imgUrl}
-              />
-            );
-          })
-        }
+    <div className="text-white mt-6 md:mt-8">
+      <div className="text-xl md:text-2xl font-semibold mb-4 md:mb-5">
+        {titleText}
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+        {cardsData.map((item, idx) => (
+          <Card
+            key={idx}
+            title={item.title}
+            description={item.description}
+            imgUrl={item.imgUrl}
+          />
+        ))}
       </div>
     </div>
   );
 };
 
+/* ============ Card ============ */
 const Card = ({ title, description, imgUrl }) => {
   return (
-    <div className="bg-black bg-opacity-40 w-1/5 p-4 rounded-lg">
-      <div className="pb-4 pt-2">
-        <img className="w-full rounded-md" src={imgUrl} alt="label" />
+    <div className="bg-black bg-opacity-40 p-3 md:p-4 rounded-lg cursor-pointer hover:bg-opacity-60 transition-all">
+      <div className="pb-3 md:pb-4 pt-1 md:pt-2">
+        <img
+          className="w-full aspect-square object-cover rounded-md"
+          src={imgUrl}
+          alt={title}
+        />
       </div>
-      <div className="text-white font-semibold py-3">{title}</div>
-      <div className="text-gray-500 text-sm">{description}</div>
+      <div className="text-white font-semibold py-2 text-sm md:text-base truncate">
+        {title}
+      </div>
+      <div className="text-gray-500 text-xs md:text-sm line-clamp-2">
+        {description}
+      </div>
     </div>
   );
 };

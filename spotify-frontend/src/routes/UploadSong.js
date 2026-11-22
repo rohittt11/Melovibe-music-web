@@ -1,14 +1,10 @@
 import { useState } from "react";
-// import {Icon} from "@iconify/react";
-// import spotify_logo from "../assets/images/spotify_logo_white.svg";
-// import MeloVibe from "../assets/images/MeloVibe.png";
 import CloudinaryUpload from "../components/shared/CloudinaryUpload";
-// import IconText from "../components/shared/IconText";
 import TextInput from "../components/shared/TextInput";
-// import TextWithHover from "../components/shared/TextWithHover";
 import { makeAuthenticatedPOSTRequest } from "../utils/serverHelpers";
 import { useNavigate } from "react-router-dom";
 import LoggedInContainer from "../containers/LoggedInContainer";
+import ContractModal from "../modals/ContractModal";
 
 const UploadSong = () => {
   const [name, setName] = useState("");
@@ -16,29 +12,59 @@ const UploadSong = () => {
   const [playlistUrl, setPlaylistUrl] = useState("");
   const [uploadedSongFileName, setUploadedSongFileName] = useState();
   const [duration, setDuration] = useState(0);
+  const [uploadedSong, setUploadedSong] = useState(null);
   const navigate = useNavigate();
+
+  // Get logged-in user's name for signature matching
+  const profileData = (() => {
+    try {
+      return JSON.parse(localStorage.getItem("profileData")) || {};
+    } catch {
+      return {};
+    }
+  })();
+
+  const artistFullName = `${profileData.firstname || ""} ${
+    profileData.lastname || ""
+  }`.trim();
 
   const submitSong = async () => {
     const data = { name, thumbnail, track: playlistUrl, duration: duration };
     const response = await makeAuthenticatedPOSTRequest("/song/create", data);
-    if (response.err) {
-      alert("Could not create song");
+
+    if (response?.err) {
+      alert("Could not create song: " + response.err);
       return;
     }
-    alert("Success");
+
+    // Song created — now show contract modal
+    setUploadedSong(response);
+  };
+
+  const handleContractSigned = () => {
+    alert("Song uploaded and contract signed successfully!");
+    setUploadedSong(null);
     navigate("/myMusic");
   };
-  // console.log(window)
-  // console.log(window.cloudinary)
+
+  const handleContractCancel = () => {
+    // Contract not signed — song is still in DB but stays unsigned
+    alert(
+      "Song uploaded, but contract not signed. You can sign it later from My Contracts."
+    );
+    setUploadedSong(null);
+    navigate("/myMusic");
+  };
+
   return (
     <LoggedInContainer curActiveScreen="uploadsong">
-      {/* This first div will be the left panel */}
-      <div className="content p-8 pt-0 overflow-auto">
-        <div className="text-2xl font-semibold mb-5 text-white mt-8">
+      <div className="content p-4 md:p-8 pt-0 overflow-auto">
+        <div className="text-xl md:text-2xl font-semibold mb-5 text-white mt-4 md:mt-8">
           Upload Your Music
         </div>
-        <div className="w-2/3 flex space-x-3">
-          <div className="w-1/2">
+
+        <div className="w-full md:w-2/3 flex flex-col sm:flex-row gap-3 mb-4">
+          <div className="w-full sm:w-1/2">
             <TextInput
               label="Name"
               labelClassName={"text-white"}
@@ -47,7 +73,7 @@ const UploadSong = () => {
               setValue={setName}
             />
           </div>
-          <div className="w-1/2">
+          <div className="w-full sm:w-1/2">
             <TextInput
               label="Thumbnail"
               labelClassName={"text-white"}
@@ -58,9 +84,10 @@ const UploadSong = () => {
             />
           </div>
         </div>
-        <div className="py-5">
+
+        <div className="py-4 md:py-5">
           {uploadedSongFileName ? (
-            <div className="bg-white rounded-full p-3 w-1/3">
+            <div className="bg-white rounded-full p-3 w-full sm:w-1/2 text-sm truncate">
               {uploadedSongFileName.substring(0, 35)}...
             </div>
           ) : (
@@ -71,13 +98,30 @@ const UploadSong = () => {
             />
           )}
         </div>
-        <div
-          className="bg-white w-40 flex items-center justify-center p-4 rounded-full cursor-pointer font-semibold"
+
+        <button
+          className="bg-purple-600 hover:bg-purple-700 text-white w-full sm:w-auto flex items-center justify-center px-6 py-3 rounded-full cursor-pointer font-semibold transition-colors disabled:opacity-50"
           onClick={submitSong}
+          disabled={!name || !thumbnail || !playlistUrl}
         >
-          Submit Song
-        </div>
+          Submit & Sign Contract
+        </button>
+
+        <p className="text-xs text-gray-400 mt-3">
+          After upload, you'll be asked to sign a contract to publish this song
+          on MeloVibe.
+        </p>
       </div>
+
+      {/* Contract Modal — appears after successful upload */}
+      {uploadedSong && (
+        <ContractModal
+          song={uploadedSong}
+          artistName={artistFullName}
+          closeModal={handleContractCancel}
+          onSigned={handleContractSigned}
+        />
+      )}
     </LoggedInContainer>
   );
 };

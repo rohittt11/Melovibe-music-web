@@ -1,1 +1,2 @@
-export const backendUrl = "http://localhost:8080";
+export const backendUrl =
+  process.env.REACT_APP_API_URL || "http://localhost:8080";

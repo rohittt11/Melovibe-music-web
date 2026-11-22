@@ -18,6 +18,9 @@ import SonglistConext from "./contexts/songListConext";
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import videoSrc from "./assets/videos/gif.mp4";
+import ArtistPage from "./routes/ArtistPage";
+import MyContracts from "./routes/MyContracts";
+import AdminPanel from "./routes/AdminPanel";
 
 function App() {
   const [currentSong, setCurrentSong] = useState(null);
@@ -27,7 +30,7 @@ function App() {
   const [songList, setSongList] = useState([]);
 
   return (
-    <div className="w-screen h-screen font-poppins">
+    <div className="w-full min-h-screen font-poppins overflow-x-hidden">
       <BrowserRouter>
         {cookie.token ? (
           <SonglistConext.Provider value={{ songList, setSongList }}>
@@ -56,7 +59,9 @@ function App() {
                   path="/playlist/:playlistId"
                   element={<SinglePlaylistView />}
                 />
-
+                <Route path="/artist/:artistId" element={<ArtistPage />} />
+                <Route path="/contracts" element={<MyContracts />} />
+                <Route path="/admin" element={<AdminPanel />} />
                 <Route path="*" element={<Navigate to="/home" />} />
               </Routes>
             </songContext.Provider>
@@ -78,12 +83,10 @@ function App() {
 const HelloComponent = () => {
   const navigate = useNavigate();
   const isMounted = useRef(true);
+
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (isMounted.current) {
-        // Check if the component is still mounted
-        navigate("/home");
-      }
+      if (isMounted.current) navigate("/home");
     }, 5000);
 
     return () => {
@@ -93,17 +96,16 @@ const HelloComponent = () => {
   }, [navigate]);
 
   return (
-    <div className="flex justify-center items-center h-screen overflow-hidden">
+    <div className="fixed inset-0 bg-black overflow-hidden">
       <video
         src={videoSrc}
-        type="video/mp4"
         autoPlay
         muted
         loop
-        className="logo-video"
+        playsInline
+        className="w-full h-full object-contain md:object-cover"
       />
     </div>
   );
 };
-
 export default App;

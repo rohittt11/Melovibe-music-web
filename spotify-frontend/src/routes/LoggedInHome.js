@@ -105,13 +105,6 @@ const MeloVibefemale = [
       "https://im.whatshot.in/event/2016/May/1464255602-sunidhi-chauhan-wallpaper.jpg?q=90",
   },
   {
-    title: "Niti Mohan",
-    description:
-      "Neeti Mohan’s soulful voice and versatility have earned her a special place among Bollywood’s top female singers. Her angelic renditions and ability to convey emotions through her songs have garnered critical acclaim.",
-    imgUrl:
-      "https://www.bookbollywoodsingers.com/wp-content/uploads/2023/06/bollywood-female-singer-for-wedding-298x300.jpg",
-  },
-  {
     title: " Shweta Subram",
     description:
       "A rising star in the Bollywood music industry, Shweta Subram is known for her melodious voice and impeccable classical training.Shweta’s ability to blend traditional Indian music with contemporary styles sets her apart and makes her one of the best female singers in Bollywood in today.",
@@ -138,21 +131,21 @@ const Home = () => {
 
 const PlaylistView = ({ titleText, cardsData }) => {
   return (
-    <div className="text-white mt-8">
-      <div className="text-2xl font-semibold mb-5">{titleText}</div>
-      <div className="w-full flex justify-between space-x-4">
-        {
-          // cardsData will be an array
-          cardsData.map((item) => {
-            return (
-              <Card
-                title={item.title}
-                description={item.description}
-                imgUrl={item.imgUrl}
-              />
-            );
-          })
-        }
+    <div className="text-white mt-6 md:mt-8">
+      <div className="text-xl md:text-2xl font-semibold mb-4 md:mb-5">
+        {titleText}
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3 md:gap-4">
+        {cardsData.map((item, index) => {
+          return (
+            <Card
+              key={index}
+              title={item.title}
+              description={item.description}
+              imgUrl={item.imgUrl}
+            />
+          );
+        })}
       </div>
     </div>
   );
@@ -160,12 +153,20 @@ const PlaylistView = ({ titleText, cardsData }) => {
 
 const Card = ({ title, description, imgUrl }) => {
   return (
-    <div className="bg-black bg-opacity-40 w-1/5 p-4 rounded-lg">
-      <div className="pb-4 pt-2">
-        <img className="w-full rounded-md" src={imgUrl} alt="label" />
+    <div className="bg-black bg-opacity-40 p-3 md:p-4 rounded-lg cursor-pointer hover:bg-opacity-60 transition-all">
+      <div className="pb-3 md:pb-4 pt-1 md:pt-2">
+        <img
+          className="w-full aspect-square object-cover rounded-md"
+          src={imgUrl}
+          alt={title}
+        />
       </div>
-      <div className="text-white font-semibold py-3">{title}</div>
-      <div className="text-gray-500 text-sm">{description}</div>
+      <div className="text-white font-semibold py-2 text-sm md:text-base truncate">
+        {title}
+      </div>
+      <div className="text-gray-500 text-xs md:text-sm line-clamp-2">
+        {description}
+      </div>
     </div>
   );
 };

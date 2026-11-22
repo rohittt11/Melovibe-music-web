@@ -3,14 +3,14 @@ import songContext from "../../contexts/songContext";
 
 const SingleSongCard = ({ info, playSound }) => {
   const { currentSong, setCurrentSong, soundPlayed } = useContext(songContext);
-
+  //It calculates duration in min.
   const duration =
     info.duration != null
-      ? (Number(info.duration["$numberDecimal"]) / 60).toFixed(2)
+      ? (Number(info.duration["$numberDecimal"]) / 60).toFixed(2) //Converts the duration from a string to a number and divides it by 60 to convert seconds to minutes.
       : 3.44;
   const minutes = Math.floor(Number(info.duration["$numberDecimal"]) / 60);
   const remainingScands = Math.floor(
-    Number(info.duration["$numberDecimal"]) % 60
+    Number(info.duration["$numberDecimal"]) % 60 //the modulus operator to get the remaining seconds.
   );
 
   return (

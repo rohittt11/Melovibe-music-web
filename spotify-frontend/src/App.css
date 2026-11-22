@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom);
+}

@@ -1,7 +1,7 @@
 {
   "name": "spotify-backend",
   "version": "1.0.0",
-  "description": "This will contain the backend for spotify clone",
+  "description": "This will contain the backend for music website clone",
   "main": "index.js",
   "scripts": {
     "dev": "nodemon index.js",
